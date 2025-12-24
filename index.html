@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>T7T zZ - Script Encoder</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#2b0000; /* أحمر غامق */
+      --bg2:#120000;
+      --card:#2f0b0b;
+      --accent:#ff4d4d;
+      --muted:#c9c9c9;
+      --glow: rgba(255,77,77,0.12);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,77,77,0.06), transparent),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:24px;
+      overflow-x:hidden;
+    }
+
+    /* نجوم سوداء تلمع */
+    .stars {
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(0,0,0,0.95) 0 2px, transparent 3px),
+        radial-gradient(circle at 30% 40%, rgba(0,0,0,0.9) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 25%, rgba(0,0,0,0.95) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 70%, rgba(0,0,0,0.9) 0 2px, transparent 3px),
+        radial-gradient(circle at 50% 60%, rgba(0,0,0,0.92) 0 2px, transparent 3px);
+      background-size: 1200px 800px;
+      animation: twinkle 4s linear infinite;
+      mix-blend-mode:overlay;
+      opacity:0.95;
+    }
+
+    @keyframes twinkle{
+      0%{filter:brightness(0.9) blur(0px)}
+      50%{filter:brightness(1.6) blur(1px)}
+      100%{filter:brightness(0.95) blur(0px)}
+    }
+
+    header{
+      z-index:2;
+      text-align:center;
+      margin-bottom:18px;
+    }
+
+    header h1{
+      margin:8px 0 0;
+      font-size:22px;
+      letter-spacing:2px;
+      color:var(--accent);
+    }
+
+    .hero-img{
+      width:100%;
+      max-width:760px;
+      border-radius:14px;
+      overflow:hidden;
+      border:2px solid rgba(255,77,77,0.12);
+      box-shadow:0 10px 40px var(--glow);
+      margin:0 auto 14px;
+      background:linear-gradient(90deg, rgba(0,0,0,0.25), rgba(255,77,77,0.06));
+    }
+
+    .hero-img img{
+      display:block;
+      width:100%;
+      height:auto;
+      object-fit:cover;
+    }
+
+    main{
+      width:100%;
+      max-width:1100px;
+      z-index:2;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    @media (max-width:880px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.06));
+      border:1px solid rgba(255,255,255,0.04);
+      padding:14px;
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      min-height:220px;
+    }
+
+    label{display:block;color:var(--muted);margin-bottom:8px;font-size:13px}
+    textarea{
+      width:100%;
+      min-height:220px;
+      resize:vertical;
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.04);
+      padding:12px;
+      border-radius:8px;
+      font-family: "Fira Code", Consolas, monospace;
+      font-size:13px;
+      outline:none;
+    }
+    textarea:focus{box-shadow:0 0 12px rgba(255,77,77,0.12);border-color:var(--accent)}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{
+      border:0;
+      padding:8px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:700;
+      color:#120000;
+      background:linear-gradient(90deg,#ff8a8a,#ff4d4d);
+      box-shadow:0 6px 18px rgba(255,77,77,0.12);
+    }
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+    .btn-copy{background:linear-gradient(90deg,#ffd27a,#ffb84d);color:#2b0b00}
+
+    .status{margin-top:10px;font-size:13px;color:#ffd7d7}
+
+    footer{margin-top:18px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
+
+    /* small helper for signature badge */
+    .sig-badge{
+      display:inline-block;
+      background:rgba(0,0,0,0.35);
+      color:#ffdddd;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:700;
+      border:1px solid rgba(255,77,77,0.08);
+      margin-left:8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <header>
+    <div class="hero-img">
+      <!-- غيّر src إلى اسم الصورة في الريبو أو رابط خارجي -->
+      <img id="heroImage" src="logo.png" alt="T7T zZ" />
+    </div>
+    <h1>T7T zZ <span class="sig-badge">Script Encoder</span></h1>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <label for="inputScript">السكربت الأصلي</label>
+        <textarea id="inputScript" placeholder="حط السكربت هنا..."></textarea>
+        <div class="row">
+          <button onclick="encodeScript()">تشفير مع إضافة الحقوق</button>
+          <button class="btn-ghost" onclick="clearInput()">مسح</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="outputScript">السكربت بعد التشفير</label>
+        <textarea id="outputScript" readonly placeholder="التشفير يظهر هنا..."></textarea>
+        <div class="row">
+          <button class="btn-copy" onclick="copyOutput()">نسخ التشفير</button>
+          <button class="btn-ghost" onclick="downloadEncoded()">تحميل كملف نصي</button>
+        </div>
+        <div id="status" class="status"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>حقوق محفوظة <strong>T7T The best of all sites</strong></div>
+  </footer>
+
+  <script>
+    // النص الذي تريد إضافته كحقوق قبل التشفير
+    const SIGNATURE = "/* T7T The best of all sites */";
+
+    function encodeScript() {
+      const inputEl = document.getElementById("inputScript");
+      const outputEl = document.getElementById("outputScript");
+      const status = document.getElementById("status");
+      const raw = inputEl.value || "";
+
+      if (!raw.trim()) {
+        status.textContent = "حط سكربت قبل التشفير.";
+        return;
+      }
+
+      // نضيف الحقوق في نهاية النص قبل التشفير
+      const withSig = raw + "\\n\\n" + SIGNATURE;
+
+      try {
+        // دعم اليونيكود قبل Base64
+        const encoded = btoa(unescape(encodeURIComponent(withSig)));
+        outputEl.value = encoded;
+        status.textContent = "تم التشفير وإضافة الحقوق بنجاح.";
+      } catch (e) {
+        status.textContent = "حدث خطأ أثناء التشفير.";
+      }
+    }
+
+    function copyOutput() {
+      const outputEl = document.getElementById("outputScript");
+      const status = document.getElementById("status");
+      if (!outputEl.value.trim()) {
+        status.textContent = "لا يوجد تشفير لنسخه.";
+        return;
+      }
+      navigator.clipboard.writeText(outputEl.value)
+        .then(()=> status.textContent = "تم نسخ التشفير.")
+        .catch(()=> status.textContent = "فشل النسخ، جرّب يدوياً.");
+    }
+
+    function clearInput() {
+      document.getElementById("inputScript").value = "";
+      document.getElementById("status").textContent = "";
+    }
+
+    function downloadEncoded() {
+      const data = document.getElementById("outputScript").value;
+      const status = document.getElementById("status");
+      if (!data.trim()) { status.textContent = "لا يوجد شيء لتحميله."; return; }
+      const blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "encoded.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      status.textContent = "تم تنزيل الملف.";
+    }
+  </script>
+</body>
+</html>
